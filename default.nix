@@ -1,8 +1,8 @@
 {
-  unstablePkgs ? import <nixpkgs> {system = builtins.currentSystem; },
+  unstablePkgs,
   nixpkgs ? unstablePkgs.path,
-  runJdk ? unstablePkgs.openjdk16,
-  version ? "13c128b74230d6cb2022577ad495ef8d2abeb4cb",
+  runJdk ? unstablePkgs.openjdk,
+  version ? "a233aaa649572b7173ea27aceed31cb705d7ba9b",
  }:
 
 with unstablePkgs;
@@ -67,9 +67,9 @@ let
         srcs.rules_java
         srcs.rules_proto
         srcs.com_google_absl
-        srcs.com_github_google_re2
+        srcs.com_googlesource_code_re2
         srcs.com_github_cares_cares
-        srcs."java_tools-v11.3.zip"
+        srcs."java_tools-v11.6.zip"
 
         srcs."remote_java_tools_${system}_for_testing"
         srcs."remotejdk11_${if stdenv.hostPlatform.isDarwin then "macos" else "linux"}"
@@ -168,7 +168,7 @@ in
 buildBazelPackage {
   inherit version;
   src = fetchTarball {
-    sha256 = "sha256:1accamcr2fdp55g2n4l1gnlkiriv6n46v63qyg31c800s7ivj0il";
+    sha256 = "sha256:0k7dqin8fv34fsrp4yb7z69814a5jig0zyc1byzkv1qcrp6kkxwm";
     url = "https://github.com/bazelbuild/bazel/archive/${version}.tar.gz";
   };
   pname = "bazel";
@@ -222,12 +222,11 @@ buildBazelPackage {
     sha256 =
       if stdenv.hostPlatform.isDarwin
       then "0iwcv6lpkipibg4jpvf9y51ba0ns74q6k0vxav29pvyjybim9pjp"
-      else "R5j6O1/CKaLVWqrGQ3tqcPh2Y1WTrTlBv9DJJNO2ROU=";
+      else "FXmp7ImxYwMlCSdlqfiSErDGk+nWsG1h9W4MlmE+qd8=";
   };
 
   buildAttrs = {
     patches = [
-      "${nixpkgs}/pkgs/development/tools/build-managers/bazel/bazel_4/no-arc.patch"
       "${nixpkgs}/pkgs/development/tools/build-managers/bazel/trim-last-argument-to-gcc-if-empty.patch"
 
       (
